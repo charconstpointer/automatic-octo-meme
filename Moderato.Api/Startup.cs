@@ -28,12 +28,10 @@ namespace Moderato.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMediatR(typeof(GetRepositorySummary).Assembly);
             services.AddHttpClient<IGitHubClient, GitHubClient>();
-            // services.AddTransient<IGitHubClient, GitHubClient>();
             services.AddControllers()
                 .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; });
             services.AddStackExchangeRedisCache(options =>
@@ -43,7 +41,6 @@ namespace Moderato.Api
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
