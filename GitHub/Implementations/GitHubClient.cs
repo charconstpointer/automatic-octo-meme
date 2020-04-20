@@ -10,6 +10,13 @@ namespace GitHub.Implementations
 {
     public class GitHubClient : IGitHubClient
     {
+        private readonly HttpClient _httpClient;
+
+        public GitHubClient(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public async Task<IEnumerable<UserRepository>> GetRepositories(string userName, string token)
         {
             var api = $"https://api.github.com/users/{userName}/repos";
@@ -35,17 +42,16 @@ namespace GitHub.Implementations
             return deserialized;
         }
 
-        private static async Task<HttpResponseMessage> GetRepos(string token, string api)
+        private async Task<HttpResponseMessage> GetRepos(string token, string api)
         {
             // const string token = "5ac3afcb86aafd69eaf4ecb9f4a8bbd34324d592";
-            using var client = new HttpClient();
             if (token != null)
             {
-                client.DefaultRequestHeaders.Add("Authorization", $"token {token}");
+                _httpClient.DefaultRequestHeaders.Add("Authorization", $"token {token}");
             }
 
-            client.DefaultRequestHeaders.Add("User-Agent", "charconstpoitner");
-            var response = await client.GetAsync(api);
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "charconstpoitner");
+            var response = await _httpClient.GetAsync(api);
             return response;
         }
     }

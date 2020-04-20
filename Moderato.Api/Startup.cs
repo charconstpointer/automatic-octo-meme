@@ -32,7 +32,8 @@ namespace Moderato.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMediatR(typeof(GetRepositorySummary).Assembly);
-            services.AddTransient<IGitHubClient, GitHubClient>();
+            services.AddHttpClient<IGitHubClient, GitHubClient>();
+            // services.AddTransient<IGitHubClient, GitHubClient>();
             services.AddControllers()
                 .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; });
             services.AddStackExchangeRedisCache(options =>
