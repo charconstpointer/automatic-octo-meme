@@ -19,7 +19,7 @@ namespace Moderato.Tests
         [InlineData("charconstpointer")]
         public async Task GetRepositorySummary_ValidUser(string username)
         {
-            var gitClient = new Mock<IGitHubClient>();
+            var gitClient = new Mock<IGitClient>();
             gitClient.Setup(x => x.GetRepositories(username, null)).ReturnsAsync(
                 new List<UserRepository>()
                 {

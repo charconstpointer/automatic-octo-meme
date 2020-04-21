@@ -9,16 +9,16 @@ namespace Moderato.Application.Queries.Handlers
 {
     public class GetRepositorySummaryHandler : IRequestHandler<GetRepositorySummary, RepositoryViewModel>
     {
-        private readonly IGitHubClient _gitHubClient;
+        private readonly IGitClient _gitClient;
 
-        public GetRepositorySummaryHandler(IGitHubClient gitHubClient)
+        public GetRepositorySummaryHandler(IGitClient gitClient)
         {
-            _gitHubClient = gitHubClient;
+            _gitClient = gitClient;
         }
 
         public async Task<RepositoryViewModel> Handle(GetRepositorySummary request, CancellationToken cancellationToken)
         {
-            var repositories = await _gitHubClient.GetRepositories(request.UserName, request.Token);
+            var repositories = await _gitClient.GetRepositories(request.UserName, request.Token);
             return repositories.AsViewModel(request.UserName);
         }
     }

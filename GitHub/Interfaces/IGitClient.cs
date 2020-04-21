@@ -5,7 +5,7 @@ using GitHub.Models;
 
 namespace GitHub.Interfaces
 {
-    public interface IGitHubClient
+    public interface IGitClient
     {
         /// <summary>
         /// Requires userName, oath token is optional, but you may face heavier rate limiting

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 using GitHub.Implementations;
 using GitHub.Interfaces;
 using MediatR;
@@ -15,6 +16,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Moderato.Api.Middleware;
+using Moderato.Application.PipelineBehaviors;
 using Moderato.Application.Queries;
 
 namespace Moderato.Api
@@ -31,9 +34,11 @@ namespace Moderato.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMediatR(typeof(GetRepositorySummary).Assembly);
-            services.AddHttpClient<IGitHubClient, GitHubClient>();
-            services.AddControllers().AddNewtonsoftJson();
-                // .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; });
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddHttpClient<IGitClient, GitHubClient>();
+            services.AddControllers()
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
+                .AddNewtonsoftJson();
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = "localhost";
@@ -51,7 +56,7 @@ namespace Moderato.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
