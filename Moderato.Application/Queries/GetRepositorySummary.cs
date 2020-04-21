@@ -1,8 +1,9 @@
 using MediatR;
+using Moderato.Application.ViewModels;
 
 namespace Moderato.Application.Queries
 {
-    public class GetRepositorySummary : IRequest<object>
+    public class GetRepositorySummary : IRequest<RepositoryViewModel>
     {
         public string UserName { get;  }
         public string Token { get; }

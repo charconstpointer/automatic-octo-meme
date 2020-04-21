@@ -3,10 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using GitHub.Interfaces;
 using MediatR;
+using Moderato.Application.Extensions;
+using Moderato.Application.ViewModels;
 
 namespace Moderato.Application.Queries.Handlers
 {
-    public class GetRepositorySummaryHandler : IRequestHandler<GetRepositorySummary, object>
+    public class GetRepositorySummaryHandler : IRequestHandler<GetRepositorySummary, RepositoryViewModel>
     {
         private readonly IGitHubClient _gitHubClient;
 
@@ -15,14 +17,10 @@ namespace Moderato.Application.Queries.Handlers
             _gitHubClient = gitHubClient;
         }
 
-        public async Task<object> Handle(GetRepositorySummary request, CancellationToken cancellationToken)
+        public async Task<RepositoryViewModel> Handle(GetRepositorySummary request, CancellationToken cancellationToken)
         {
             var repositories = await _gitHubClient.GetRepositories(request.UserName, request.Token);
-            var occurrences = repositories
-                .SelectMany(x => x.Name.ToCharArray())
-                .GroupBy(x => x);
-            return occurrences
-                .Select(x => new {Letter = x.FirstOrDefault(), Count = x.Count()});
+            return repositories.AsViewModel();
         }
     }
 }
