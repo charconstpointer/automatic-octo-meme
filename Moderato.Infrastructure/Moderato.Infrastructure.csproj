@@ -6,6 +6,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GitHub\GitHub.csproj" />
+      <ProjectReference Include="..\Moderato.Application\Moderato.Application.csproj" />
+      <ProjectReference Include="..\Moderato.Domain\Moderato.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

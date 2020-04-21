@@ -19,7 +19,9 @@ using Microsoft.Extensions.Logging;
 using Moderato.Api.Middleware;
 using Moderato.Application.PipelineBehaviors;
 using Moderato.Application.Queries;
+using Moderato.Application.Services;
 using Moderato.Infrastructure.Github;
+using Moderato.Infrastructure.Services.GitUsers;
 
 namespace Moderato.Api
 {
@@ -38,23 +40,25 @@ namespace Moderato.Api
         {
             services.AddMediatR(typeof(GetRepositorySummary).Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddTransient<IGitUsersService, GitUsersService>();
             services.AddHttpClient<IGitClient, GitHubClient>();
             services.Decorate<IGitClient, CachedGitHubClient>();
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
                 .AddNewtonsoftJson();
-            if (Environment.IsDevelopment())
-            {
-                services.AddDistributedMemoryCache();
-            }
-            else
-            {
-                services.AddStackExchangeRedisCache(options =>
-                {
-                    options.Configuration = Configuration.GetConnectionString("redis") ?? "localhost";
-                    options.InstanceName = "Moderato.Cache";
-                });
-            }
+            services.AddDistributedMemoryCache();
+            // if (Environment.IsDevelopment())
+            // {
+            //     services.AddDistributedMemoryCache();
+            // }
+            // else
+            // {
+            //     services.AddStackExchangeRedisCache(options =>
+            //     {
+            //         options.Configuration = Configuration.GetConnectionString("redis") ?? "localhost";
+            //         options.InstanceName = "Moderato.Cache";
+            //     });
+            // }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

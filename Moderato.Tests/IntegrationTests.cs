@@ -35,5 +35,13 @@ namespace Moderato.Tests
             deserialized.Forks.Should().BeGreaterThan(0);
             deserialized.Owner.Should().NotBeEmpty();
         }
+
+        [Fact]
+        public async Task Repositories_ProvidedNotExistingUsername_ShouldReturnNotFound()
+        {
+            var response = await _httpClient.GetAsync("/repositories/pleasedontexist4937274329874923749283xx");
+            response.StatusCode.Should().Be(404);
+            response.IsSuccessStatusCode.Should().BeFalse();
+        }
     }
 }

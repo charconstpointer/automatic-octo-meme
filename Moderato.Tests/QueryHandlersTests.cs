@@ -8,6 +8,7 @@ using GitHub.Models;
 using MediatR;
 using Moderato.Application.Queries;
 using Moderato.Application.Queries.Handlers;
+using Moderato.Application.Services;
 using Moq;
 using Xunit;
 
@@ -20,6 +21,7 @@ namespace Moderato.Tests
         public async Task GetRepositorySummary_ValidUser(string username)
         {
             var gitClient = new Mock<IGitClient>();
+            var gitService = new Mock<IGitUsersService>();
             gitClient.Setup(x => x.GetRepositories(username, null)).ReturnsAsync(
                 new List<UserRepository>()
                 {
@@ -41,7 +43,7 @@ namespace Moderato.Tests
                     }
                 });
             var query = new GetRepositorySummary(username, null);
-            var handler = new GetRepositorySummaryHandler(gitClient.Object);
+            var handler = new GetRepositorySummaryHandler(gitClient.Object, gitService.Object);
             var response = await handler.Handle(query, CancellationToken.None);
             response.Should().NotBeNull();
             response.Forks.Should().Be(3.0);
