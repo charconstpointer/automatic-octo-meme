@@ -1,5 +1,6 @@
-# automatic-octo-meme
-🕶.NET Core
-🤝MediatR
-🌐Redis
-🐳Docker
+# Moderato 🎆
+ - 🎪 .NET Core 
+ - 🤝MediatR 
+ - 🌐Redis
+ - 🐳Docker
+
