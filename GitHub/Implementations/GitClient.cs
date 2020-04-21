@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GitHub.Exceptions;
+using GitHub.Extensions;
 using GitHub.Interfaces;
 using GitHub.Models;
 
@@ -43,14 +44,8 @@ namespace GitHub.Implementations
 
         private static async Task<IEnumerable<UserRepository>> Deserialize(HttpResponseMessage response)
         {
-            var content = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var deserialized =
-                await JsonSerializer.DeserializeAsync<IEnumerable<UserRepository>>(content, options);
-            return deserialized;
+            var content = await response.Content.ReadAsStringAsync();
+            return content.AsEntity();
         }
 
         private async Task<HttpResponseMessage> GetRepos(string token, string api)

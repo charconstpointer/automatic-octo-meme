@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using GitHub.Extensions;
 using GitHub.Interfaces;
 using GitHub.Models;
 using Microsoft.Extensions.Caching.Distributed;
@@ -29,7 +30,7 @@ namespace Moderato.Infrastructure.Github
             var cachedResponse = await _cache.GetStringAsync(userName);
             if (!string.IsNullOrEmpty(cachedResponse))
             {
-                return JsonConvert.DeserializeObject<IEnumerable<UserRepository>>(cachedResponse);
+                return cachedResponse.AsEntity();
             }
 
             var response = await _gitClient.GetRepositories(userName, token);
