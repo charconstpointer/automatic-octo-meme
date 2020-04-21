@@ -10,5 +10,10 @@ namespace GitHub.Extensions
         {
             return JsonConvert.DeserializeObject<IEnumerable<UserRepository>>(source);
         }
+        
+        public static string AsString(this IEnumerable<UserRepository> source)
+        {
+            return JsonConvert.SerializeObject(source);
+        }
     }
 }

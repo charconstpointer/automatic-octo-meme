@@ -16,11 +16,11 @@ namespace Moderato.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{userName:alpha}")]
-        public async Task<IActionResult> GetSummary(string userName)
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetSummary(string username)
         {
             var token = Request.Headers["Authorization"];
-            return Ok(await _mediator.Send(new GetRepositorySummary(userName, token)));
+            return Ok(await _mediator.Send(new GetRepositorySummary(username, token)));
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using GitHub.Extensions;
@@ -25,15 +26,19 @@ namespace Moderato.Infrastructure.Github
             _cache = cache;
         }
 
-        public async Task<IEnumerable<UserRepository>> GetRepositories(string userName, string token)
+        public async Task<IEnumerable<UserRepository>> GetRepositories(string username, string token)
         {
-            var cachedResponse = await _cache.GetStringAsync(userName);
+            var cachedResponse = await _cache.GetStringAsync(username);
             if (!string.IsNullOrEmpty(cachedResponse))
             {
                 return cachedResponse.AsEntity();
             }
 
-            var response = await _gitClient.GetRepositories(userName, token);
+            var response = (await _gitClient.GetRepositories(username, token)).ToList();
+            await _cache.SetStringAsync(username, response.AsString(), new DistributedCacheEntryOptions
+            {
+                SlidingExpiration = TimeSpan.FromSeconds(60)
+            });
             return response;
 
         }

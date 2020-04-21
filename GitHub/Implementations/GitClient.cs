@@ -36,9 +36,9 @@ namespace GitHub.Implementations
         {
             throw response.StatusCode switch
             {
-                HttpStatusCode.NotFound => new UserNotFoundException(),
-                HttpStatusCode.Unauthorized => new UserNotAuthorizedException(),
-                _ => new InfrastructureException()
+                HttpStatusCode.NotFound => new UserNotFoundException("Requested user was not found"),
+                HttpStatusCode.Unauthorized => new UserNotAuthorizedException("Provided api key is either not correct or you hit api limit"),
+                _ => new InfrastructureException("Requested service is not available, please try again later ")
             };
         }
 

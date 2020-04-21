@@ -43,7 +43,6 @@ namespace Moderato.Api.Middleware
             };
 
             context.Response.ContentType = "application/json";
-            context.Response.ContentType = "application/json";
 
             var response = new {exception.Message};
             var json = JsonConvert.SerializeObject(response);
