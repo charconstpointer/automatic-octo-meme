@@ -36,6 +36,7 @@ namespace Moderato.Tests
             user.Repositories.Should().HaveCount(repositories.Count);
             user.Repositories.ToList()[0].Name.Should().Be(repo1);
             user.Repositories.ToList()[1].Name.Should().Be(repo2);
+            
         }
     }
 }
