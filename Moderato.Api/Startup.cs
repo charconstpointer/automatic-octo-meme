@@ -32,8 +32,8 @@ namespace Moderato.Api
         {
             services.AddMediatR(typeof(GetRepositorySummary).Assembly);
             services.AddHttpClient<IGitHubClient, GitHubClient>();
-            services.AddControllers()
-                .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; });
+            services.AddControllers().AddNewtonsoftJson();
+                // .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; });
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = "localhost";

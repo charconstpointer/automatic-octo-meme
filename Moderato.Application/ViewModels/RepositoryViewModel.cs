@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Moderato.Application.ViewModels
 {
@@ -7,15 +9,15 @@ namespace Moderato.Application.ViewModels
     {
         [JsonPropertyName("owner")]
         public string Owner { get; set; }
-        [JsonPropertyName("letters")]
-        public object Letters { get; set; }
-        [JsonPropertyName("avgStargazers")]
+        [JsonProperty(PropertyName = "letters")]
+        public Dictionary<char, int> Letters { get; set; }
+        [JsonProperty(PropertyName = "avgStargazers")]
         public double Stars { get; set; }
-        [JsonPropertyName("avgWatchers")]
+        [JsonProperty(PropertyName = "avgWatchers")]
         public double Watchers { get; set; }
-        [JsonPropertyName("avgForks")]
+        [JsonProperty(PropertyName = "avgForks")]
         public double Forks { get; set; }
-        [JsonPropertyName("avgSize")]
+        [JsonProperty(PropertyName = "avgSize")]
         public double Size { get; set; }
     }
 }

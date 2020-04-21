@@ -20,7 +20,7 @@ namespace Moderato.Application.Queries.Handlers
         public async Task<RepositoryViewModel> Handle(GetRepositorySummary request, CancellationToken cancellationToken)
         {
             var repositories = await _gitHubClient.GetRepositories(request.UserName, request.Token);
-            return repositories.AsViewModel();
+            return repositories.AsViewModel(request.UserName);
         }
     }
 }
