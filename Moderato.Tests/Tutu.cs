@@ -10,18 +10,18 @@ using Xunit;
 
 namespace Moderato.Tests
 {
-    public class Tutu
+    public class IntegrationTests
     {
         private readonly HttpClient _httpClient;
 
-        public Tutu()
+        public IntegrationTests()
         {
             var appFactory = new WebApplicationFactory<Startup>();
             _httpClient = appFactory.CreateClient();
         }
 
         [Fact]
-        public async Task Test()
+        public async Task Repositories_ProvidedExistingUsername_ShouldReturnSuccessfully()
         {
             var response = await _httpClient.GetAsync("/repositories/jskeet");
             response.StatusCode.Should().Be(200);
