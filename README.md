@@ -7,5 +7,6 @@
  - 🐳Docker
 
 ### How to run
-✔ docker-compose up
-🏁 localhost:80/repositories/{github-username}
+
+ - ✔ docker-compose up 
+ - 🏁 localhost:80/repositories/{github-username}
