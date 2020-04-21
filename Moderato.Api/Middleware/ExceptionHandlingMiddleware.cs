@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using GitHub.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Moderato.Infrastructure.Exceptions;
 using Newtonsoft.Json;
 
 namespace Moderato.Api.Middleware
@@ -35,6 +36,7 @@ namespace Moderato.Api.Middleware
             {
                 UserNotFoundException _ => (int) HttpStatusCode.NotFound,
                 UserNotAuthorizedException _ => (int) HttpStatusCode.Unauthorized,
+                InsufficientRepositoryCount _ => (int) HttpStatusCode.BadRequest,
                 InfrastructureException _ => (int) HttpStatusCode.InternalServerError,
                 ValidationException _ => (int) HttpStatusCode.BadRequest,
                 _ => 500

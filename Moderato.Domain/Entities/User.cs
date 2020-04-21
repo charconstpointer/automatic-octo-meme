@@ -18,14 +18,20 @@ namespace Moderato.Domain.Entities
 
         public void AddRepository(Repository repository)
         {
-            _repositories.Add(repository);
+            if (repository != null)
+            {
+                _repositories.Add(repository);
+            }
         }
 
         public void AddRepositories(IEnumerable<Repository> repositories)
         {
-            foreach (var repository in repositories)
+            if (repositories != null)
             {
-                AddRepository(repository);
+                foreach (var repository in repositories)
+                {
+                    AddRepository(repository);
+                }
             }
         }
     }

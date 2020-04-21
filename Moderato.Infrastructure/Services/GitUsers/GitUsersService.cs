@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moderato.Application.Services;
 using Moderato.Application.ViewModels;
 using Moderato.Domain.Entities;
+using Moderato.Infrastructure.Exceptions;
 
 namespace Moderato.Infrastructure.Services.GitUsers
 {
@@ -11,16 +12,21 @@ namespace Moderato.Infrastructure.Services.GitUsers
     {
         public async Task<RepositoryViewModel> CreateUserSummary(User user)
         {
-            var letters = SummarizeRepository(user);
-            return await Task.FromResult(new RepositoryViewModel
+            if (user.Repositories.Any())
             {
-                Owner = user.Username,
-                Stars = user.Repositories.AsParallel().Average(r => r.Stargazers),
-                Watchers = user.Repositories.AsParallel().Average(r => r.Watchers),
-                Forks = user.Repositories.AsParallel().Average(r => r.Forks),
-                Size = user.Repositories.AsParallel().Average(r => r.Size),
-                Letters = letters
-            });
+                var letters = SummarizeRepository(user);
+                return await Task.FromResult(new RepositoryViewModel
+                {
+                    Owner = user.Username,
+                    Stars = user.Repositories.AsParallel().Average(r => r.Stargazers),
+                    Watchers = user.Repositories.AsParallel().Average(r => r.Watchers),
+                    Forks = user.Repositories.AsParallel().Average(r => r.Forks),
+                    Size = user.Repositories.AsParallel().Average(r => r.Size),
+                    Letters = letters
+                });
+            }
+
+            throw new InsufficientRepositoryCount();
         }
 
         public static Dictionary<char, int> SummarizeRepository(User user)
