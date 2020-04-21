@@ -7,6 +7,7 @@ using GitHub.Extensions;
 using GitHub.Interfaces;
 using GitHub.Models;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Moderato.Infrastructure.Github
@@ -19,11 +20,13 @@ namespace Moderato.Infrastructure.Github
     {
         private readonly IGitClient _gitClient;
         private readonly IDistributedCache _cache;
+        private readonly int _cacheDuration;
 
-        public CachedGitHubClient(IGitClient gitClient, IDistributedCache cache)
+        public CachedGitHubClient(IGitClient gitClient, IDistributedCache cache, IConfiguration configuration)
         {
             _gitClient = gitClient;
             _cache = cache;
+            _cacheDuration = int.TryParse(configuration["CacheDuration"] ?? "60", out var duration) ? duration : 60;
         }
 
         public async Task<IEnumerable<UserRepository>> GetRepositories(string username, string token)
@@ -37,10 +40,9 @@ namespace Moderato.Infrastructure.Github
             var response = (await _gitClient.GetRepositories(username, token)).ToList();
             await _cache.SetStringAsync(username, response.AsString(), new DistributedCacheEntryOptions
             {
-                SlidingExpiration = TimeSpan.FromSeconds(60)
+                SlidingExpiration = TimeSpan.FromSeconds(_cacheDuration)
             });
             return response;
-
         }
     }
 }
