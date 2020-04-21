@@ -10,11 +10,11 @@ using Xunit;
 
 namespace Moderato.Tests
 {
-    public class IntegrationTests
+    public class EndToEndTests
     {
         private readonly HttpClient _httpClient;
 
-        public IntegrationTests()
+        public EndToEndTests()
         {
             var appFactory = new WebApplicationFactory<Startup>();
             _httpClient = appFactory.CreateClient();
