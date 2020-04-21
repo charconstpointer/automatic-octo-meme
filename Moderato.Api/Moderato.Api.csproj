@@ -12,11 +12,13 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
       <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.3" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="Scrutor" Version="3.2.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Moderato.Application\Moderato.Application.csproj" />
       <ProjectReference Include="..\Moderato.Domain\Moderato.Domain.csproj" />
+      <ProjectReference Include="..\Moderato.Infrastructure\Moderato.Infrastructure.csproj" />
     </ItemGroup>
 
 

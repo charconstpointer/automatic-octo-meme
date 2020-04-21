@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Moderato.Api.Middleware;
 using Moderato.Application.PipelineBehaviors;
 using Moderato.Application.Queries;
+using Moderato.Infrastructure.Github;
 
 namespace Moderato.Api
 {
@@ -36,13 +37,14 @@ namespace Moderato.Api
             services.AddMediatR(typeof(GetRepositorySummary).Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddHttpClient<IGitClient, GitHubClient>();
+            services.Decorate<IGitClient, CachedGitHubClient>();
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
                 .AddNewtonsoftJson();
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "localhost";
-                options.InstanceName = "Throttles";
+                options.Configuration = Configuration.GetConnectionString("redis") ?? "localhost";
+                options.InstanceName = "Moderato.Cache";
             });
         }
 
