@@ -25,11 +25,13 @@ namespace Moderato.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
+        public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -41,11 +43,18 @@ namespace Moderato.Api
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()))
                 .AddNewtonsoftJson();
-            services.AddStackExchangeRedisCache(options =>
+            if (Environment.IsDevelopment())
             {
-                options.Configuration = Configuration.GetConnectionString("redis") ?? "localhost";
-                options.InstanceName = "Moderato.Cache";
-            });
+                services.AddDistributedMemoryCache();
+            }
+            else
+            {
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = Configuration.GetConnectionString("redis") ?? "localhost";
+                    options.InstanceName = "Moderato.Cache";
+                });
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
